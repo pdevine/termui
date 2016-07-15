@@ -41,7 +41,7 @@ func Init() error {
 	DefaultEvtStream.Merge("timer", NewTimerCh(time.Second))
 	DefaultEvtStream.Merge("custom", usrEvtCh)
 
-	DefaultEvtStream.Handle("/", DefualtHandler)
+	DefaultEvtStream.Handle("/", DefaultHandler)
 	DefaultEvtStream.Handle("/sys/wnd/resize", func(e Event) {
 		w := e.Data.(EvtWnd)
 		Body.Width = w.Width
@@ -89,6 +89,12 @@ func TermHeight() int {
 // Render renders all Bufferer in the given order from left to right,
 // right could overlap on left ones.
 func render(bs ...Bufferer) {
+	// clear screen for sprite movement
+	for x := 0; x < termWidth; x++ {
+		for y := 0; y < termHeight; y++ {
+			tm.SetCell(x, y, ' ', toTmAttr(0), toTmAttr(0))
+		}
+	}
 
 	for _, b := range bs {
 
@@ -96,9 +102,10 @@ func render(bs ...Bufferer) {
 		// set cels in buf
 		for p, c := range buf.CellMap {
 			if p.In(buf.Area) {
-
-				tm.SetCell(p.X, p.Y, c.Ch, toTmAttr(c.Fg), toTmAttr(c.Bg))
-
+				// don't show chars which have an alpha chan
+				if c.Visible {
+					tm.SetCell(p.X, p.Y, c.Ch, toTmAttr(c.Fg), toTmAttr(c.Bg))
+				}
 			}
 		}
 

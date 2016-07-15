@@ -302,7 +302,7 @@ func NewTimerCh(du time.Duration) chan Event {
 	return t
 }
 
-var DefualtHandler = func(e Event) {
+var DefaultHandler = func(e Event) {
 }
 
 var usrEvtCh = make(chan Event)

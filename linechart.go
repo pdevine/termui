@@ -105,24 +105,29 @@ func (lc *LineChart) renderBraille() Buffer {
 
 		if b0 == b1 {
 			c := Cell{
-				Ch: braillePatterns[[2]int{m0, m1}],
-				Bg: lc.Bg,
-				Fg: lc.LineColor,
+				Ch:      braillePatterns[[2]int{m0, m1}],
+				Bg:      lc.Bg,
+				Fg:      lc.LineColor,
+				Visible: true,
 			}
 			y := lc.innerArea.Min.Y + lc.innerArea.Dy() - 3 - b0
 			x := lc.innerArea.Min.X + lc.labelYSpace + 1 + i
 			buf.Set(x, y, c)
 		} else {
 			c0 := Cell{Ch: lSingleBraille[m0],
-				Fg: lc.LineColor,
-				Bg: lc.Bg}
+				Fg:      lc.LineColor,
+				Bg:      lc.Bg,
+				Visible: true,
+			}
 			x0 := lc.innerArea.Min.X + lc.labelYSpace + 1 + i
 			y0 := lc.innerArea.Min.Y + lc.innerArea.Dy() - 3 - b0
 			buf.Set(x0, y0, c0)
 
 			c1 := Cell{Ch: rSingleBraille[m1],
-				Fg: lc.LineColor,
-				Bg: lc.Bg}
+				Fg:      lc.LineColor,
+				Bg:      lc.Bg,
+				Visible: true,
+			}
 			x1 := lc.innerArea.Min.X + lc.labelYSpace + 1 + i
 			y1 := lc.innerArea.Min.Y + lc.innerArea.Dy() - 3 - b1
 			buf.Set(x1, y1, c1)
@@ -136,9 +141,10 @@ func (lc *LineChart) renderDot() Buffer {
 	buf := NewBuffer()
 	for i := 0; i < len(lc.Data) && i < lc.axisXWidth; i++ {
 		c := Cell{
-			Ch: lc.DotStyle,
-			Fg: lc.LineColor,
-			Bg: lc.Bg,
+			Ch:      lc.DotStyle,
+			Fg:      lc.LineColor,
+			Bg:      lc.Bg,
+			Visible: true,
 		}
 		x := lc.innerArea.Min.X + lc.labelYSpace + 1 + i
 		y := lc.innerArea.Min.Y + lc.innerArea.Dy() - 3 - int((lc.Data[i]-lc.bottomValue)/lc.scale+0.5)
@@ -267,14 +273,14 @@ func (lc *LineChart) plotAxes() Buffer {
 	origY := lc.innerArea.Min.Y + lc.innerArea.Dy() - 2
 	origX := lc.innerArea.Min.X + lc.labelYSpace
 
-	buf.Set(origX, origY, Cell{Ch: ORIGIN, Fg: lc.AxesColor, Bg: lc.Bg})
+	buf.Set(origX, origY, Cell{Ch: ORIGIN, Fg: lc.AxesColor, Bg: lc.Bg, Visible: true})
 
 	for x := origX + 1; x < origX+lc.axisXWidth; x++ {
-		buf.Set(x, origY, Cell{Ch: HDASH, Fg: lc.AxesColor, Bg: lc.Bg})
+		buf.Set(x, origY, Cell{Ch: HDASH, Fg: lc.AxesColor, Bg: lc.Bg, Visible: true})
 	}
 
 	for dy := 1; dy <= lc.axisYHeight; dy++ {
-		buf.Set(origX, origY-dy, Cell{Ch: VDASH, Fg: lc.AxesColor, Bg: lc.Bg})
+		buf.Set(origX, origY-dy, Cell{Ch: VDASH, Fg: lc.AxesColor, Bg: lc.Bg, Visible: true})
 	}
 
 	// x label
@@ -285,9 +291,10 @@ func (lc *LineChart) plotAxes() Buffer {
 		}
 		for j, r := range rs {
 			c := Cell{
-				Ch: r,
-				Fg: lc.AxesColor,
-				Bg: lc.Bg,
+				Ch:      r,
+				Fg:      lc.AxesColor,
+				Bg:      lc.Bg,
+				Visible: true,
 			}
 			x := origX + oft + j
 			y := lc.innerArea.Min.Y + lc.innerArea.Dy() - 1
@@ -302,7 +309,7 @@ func (lc *LineChart) plotAxes() Buffer {
 			buf.Set(
 				lc.innerArea.Min.X+j,
 				origY-i*(lc.axisYLabelGap+1),
-				Cell{Ch: r, Fg: lc.AxesColor, Bg: lc.Bg})
+				Cell{Ch: r, Fg: lc.AxesColor, Bg: lc.Bg, Visible: true})
 		}
 	}
 

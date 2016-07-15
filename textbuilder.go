@@ -216,7 +216,7 @@ func wrapTx(cs []Cell, wl int) []Cell {
 				trigger = "stop"
 			} else if plainRune[i] != plainWrappedRune[i] && plainWrappedRune[i] == 10 {
 				trigger = "go"
-				cell := Cell{10, 0, 0}
+				cell := Cell{10, 0, 0, true}
 				j := i - 0
 
 				// insert a cell into the []Cell in correct position
@@ -260,7 +260,7 @@ func (mtb MarkdownTxBuilder) Build(s string, fg, bg Attribute) []Cell {
 	mtb.parse(s)
 	cs := make([]Cell, len(mtb.plainTx))
 	for i := range cs {
-		cs[i] = Cell{Ch: mtb.plainTx[i], Fg: fg, Bg: bg}
+		cs[i] = Cell{Ch: mtb.plainTx[i], Fg: fg, Bg: bg, Visible: true}
 	}
 	for _, mrk := range mtb.markers {
 		for i := mrk.st; i < mrk.ed; i++ {

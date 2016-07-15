@@ -57,7 +57,7 @@ func (g *Gauge) Buffer() Buffer {
 	w := g.Percent * g.innerArea.Dx() / 100
 	for i := 0; i < g.innerArea.Dy(); i++ {
 		for j := 0; j < w; j++ {
-			c := Cell{}
+			c := Cell{Visible: true}
 			c.Ch = ' '
 			c.Bg = g.BarColor
 			if c.Bg == ColorDefault {
@@ -86,8 +86,9 @@ func (g *Gauge) Buffer() Buffer {
 
 	for i, v := range rs {
 		c := Cell{
-			Ch: v,
-			Fg: g.PercentColor,
+			Ch:      v,
+			Fg:      g.PercentColor,
+			Visible: true,
 		}
 
 		if w+g.innerArea.Min.X > pos+i {
